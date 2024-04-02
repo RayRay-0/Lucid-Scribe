@@ -1,6 +1,8 @@
 using Lucid_Scribe.Data;
 using Lucid_Scribe.Data.Repositories;
 using Lucid_Scribe.Data.Repositories.Abstractions;
+using Lucid_Scribe.Services;
+using Lucid_Scribe.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +16,7 @@ namespace Lucid_Scribe
 
             // Add services to the container.
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(connectionString));
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -22,8 +25,9 @@ namespace Lucid_Scribe
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
-
-
+            builder.Services.AddTransient<IEmotionService, 
+                EmotionService>();
+            builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
