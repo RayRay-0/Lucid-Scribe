@@ -1,4 +1,6 @@
 using Lucid_Scribe.Data;
+using Lucid_Scribe.Data.Repositories;
+using Lucid_Scribe.Data.Repositories.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,6 +21,8 @@ namespace Lucid_Scribe
             builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
             builder.Services.AddControllersWithViews();
+            builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+
 
             var app = builder.Build();
 

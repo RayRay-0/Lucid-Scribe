@@ -16,4 +16,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.21" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Lucid-Scribe.Data\Lucid-Scribe.Data.csproj" />
+    <ProjectReference Include="..\Lucid-Scribe.Services\Lucid-Scribe.Services.csproj" />
+  </ItemGroup>
+
 </Project>
