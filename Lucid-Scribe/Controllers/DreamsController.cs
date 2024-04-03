@@ -1,26 +1,27 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lucid_Scribe.Services.DTOs;
 using Lucid_Scribe.Services.Abstractions;
 
 namespace Lucid_Scribe.Controllers
 {
-    public class EmotionsController : Controller
+    public class DreamsController : Controller
     {
-        private readonly IEmotionService _emotionService;
+        private readonly IDreamService _dreamService;
 
-        public EmotionsController(IEmotionService emotionService)
+        public DreamsController(IDreamService dreamService)
         {
-            _emotionService = emotionService;
+            _dreamService = dreamService;
         }
 
-        // GET: Emotions
+        // GET: Dreams
         public async Task<IActionResult> Index()
         {
-            return View(await _emotionService.GetAsync());
+            return View(await _dreamService.GetAsync());
         }
 
-        // GET: Emotions/Details/5
+        // GET: Dreams/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -28,34 +29,34 @@ namespace Lucid_Scribe.Controllers
                 return NotFound();
             }
 
-            var emotion = await _emotionService.GetByIdAsync(id.Value);
-            if (emotion == null)
+            var dream = await _dreamService.GetByIdAsync(id.Value);
+            if (dream == null)
             {
                 return NotFound();
             }
 
-            return View(emotion);
+            return View(dream);
         }
 
-        // GET: Emotions/Create
+        // GET: Dreams/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Emotions/Create
+        // POST: Dreams/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(EmotionDTO emotion)
+        public async Task<IActionResult> Create(DreamDTO dream)
         {
             if (ModelState.IsValid)
             {
-                await _emotionService.AddAsync(emotion);
+                await _dreamService.AddAsync(dream);
                 return RedirectToAction(nameof(Index));
             }
-            return View(emotion);
+            return View(dream);
         }
 
         // GET: Emotions/Edit/5
@@ -66,22 +67,22 @@ namespace Lucid_Scribe.Controllers
                 return NotFound();
             }
 
-            var emotion = await _emotionService.GetByIdAsync(id.Value);
-            if (emotion == null)
+            var dream = await _dreamService.GetByIdAsync(id.Value);
+            if (dream == null)
             {
                 return NotFound();
             }
-            return View(emotion);
+            return View(dream);
         }
 
-        // POST: Emotions/Edit/5
+        // POST: Dreams/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, EmotionDTO emotion)
+        public async Task<IActionResult> Edit(int id, DreamDTO dream)
         {
-            if (id != emotion.Id)
+            if (id != dream.Id)
             {
                 return NotFound();
             }
@@ -90,11 +91,11 @@ namespace Lucid_Scribe.Controllers
             {
                 try
                 {
-                    await _emotionService.UpdateAsync(emotion);
+                    await _dreamService.UpdateAsync(dream);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!await EmotionExists(emotion.Id))
+                    if (!await DreamExists(dream.Id))
                     {
                         return NotFound();
                     }
@@ -105,10 +106,10 @@ namespace Lucid_Scribe.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(emotion);
+            return View(dream);
         }
 
-        // GET: Emotions/Delete/5
+        // GET: Dreams/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -116,27 +117,27 @@ namespace Lucid_Scribe.Controllers
                 return NotFound();
             }
 
-            var emotion = await _emotionService.GetByIdAsync(id.Value);
-            if (emotion == null)
+            var dream = await _dreamService.GetByIdAsync(id.Value);
+            if (dream == null)
             {
                 return NotFound();
             }
 
-            return View(emotion);
+            return View(dream);
         }
 
-        // POST: Emotions/Delete/5
+        // POST: Dreams/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            await _emotionService.DeleteByIdAsync(id);
+            await _dreamService.DeleteByIdAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        private async Task<bool> EmotionExists(int id)
+        private async Task<bool> DreamExists(int id)
         {
-          return (await _emotionService.GetByIdAsync(id)) != null;
+            return (await _dreamService.GetByIdAsync(id)) != null;
         }
     }
 }
