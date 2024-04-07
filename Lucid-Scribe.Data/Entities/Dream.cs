@@ -14,6 +14,7 @@ namespace Lucid_Scribe.Data.Entities
         public DateTime EntryDate { get; set; }
         public string UserId { get; set; }
         public virtual AppUser? User { get; set; }
+        /// Color , People (string) , places, objects, weirdness slider (0 - 1)
         public virtual ICollection<Emotion>? Emotions { get; set; }
     }
 }

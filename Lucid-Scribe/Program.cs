@@ -1,4 +1,5 @@
 using Lucid_Scribe.Data;
+using Lucid_Scribe.Data.Entities;
 using Lucid_Scribe.Data.Repositories;
 using Lucid_Scribe.Data.Repositories.Abstractions;
 using Lucid_Scribe.Services;
@@ -18,15 +19,24 @@ namespace Lucid_Scribe
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
+            {
+                options.UseSqlServer(connectionString);
+                options.UseLazyLoadingProxies();
+            });
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-            builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+            builder.Services.AddIdentity<AppUser, IdentityRole>()
+             .AddEntityFrameworkStores<ApplicationDbContext>()
+             .AddDefaultUI()
+             .AddDefaultTokenProviders();
             builder.Services.AddControllersWithViews();
             builder.Services.AddTransient(typeof(IRepository<>), typeof(Repository<>));
+            builder.Services.AddTransient<IDreamRepository, 
+                DreamRepository>();
             builder.Services.AddTransient<IEmotionService, 
                 EmotionService>();
+            builder.Services.AddTransient<IDreamService,
+                DreamService>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var app = builder.Build();
 

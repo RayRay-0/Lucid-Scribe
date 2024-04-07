@@ -3,16 +3,25 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Lucid_Scribe.Services.DTOs;
 using Lucid_Scribe.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Lucid_Scribe.Data.Entities;
+using System.IO;
 
 namespace Lucid_Scribe.Controllers
 {
+    [Authorize]
     public class DreamsController : Controller
     {
         private readonly IDreamService _dreamService;
+        private readonly IEmotionService _emotionService;
+        private readonly UserManager<AppUser> _userManager;
 
-        public DreamsController(IDreamService dreamService)
+        public DreamsController(IDreamService dreamService, IEmotionService emotionService, UserManager<AppUser> userManager)
         {
             _dreamService = dreamService;
+            _emotionService = emotionService;
+            _userManager = userManager;
         }
 
         // GET: Dreams
@@ -39,9 +48,12 @@ namespace Lucid_Scribe.Controllers
         }
 
         // GET: Dreams/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            return View();
+            ViewBag.Emotions = await _emotionService.GetAsync();
+            DreamCreateDTO model = new DreamCreateDTO();
+            model.UserId = (await _userManager.GetUserAsync(User)).Id;
+            return View(model);
         }
 
         // POST: Dreams/Create
@@ -49,17 +61,19 @@ namespace Lucid_Scribe.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(DreamDTO dream)
-        {
+        public async Task<IActionResult> Create(DreamCreateDTO dream)
+        {                
             if (ModelState.IsValid)
             {
                 await _dreamService.AddAsync(dream);
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Emotions = await _emotionService.GetAsync();
+
             return View(dream);
         }
 
-        // GET: Emotions/Edit/5
+        // GET: Dreams/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,7 +86,10 @@ namespace Lucid_Scribe.Controllers
             {
                 return NotFound();
             }
-            return View(dream);
+            ViewBag.Emotions = await _emotionService.GetAsync();
+            var model = new DreamEditDTO(dream);
+            model.EmotionsIds = dream.Emotions.Select(item => item.Id).ToList();
+            return View(model);
         }
 
         // POST: Dreams/Edit/5
@@ -80,7 +97,7 @@ namespace Lucid_Scribe.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, DreamDTO dream)
+        public async Task<IActionResult> Edit(int id, DreamEditDTO dream)
         {
             if (id != dream.Id)
             {

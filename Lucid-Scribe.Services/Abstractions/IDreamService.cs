@@ -11,8 +11,8 @@ namespace Lucid_Scribe.Services.Abstractions
     {
         Task<List<DreamDTO>> GetAsync();
         Task<DreamDTO> GetByIdAsync(int id);
-        Task AddAsync(DreamDTO Emotion);
+        Task AddAsync(DreamCreateDTO Emotion);
         Task DeleteByIdAsync(int id);
-        Task UpdateAsync(DreamDTO Emotion);
+        Task UpdateAsync(DreamEditDTO Emotion);
     }
 }

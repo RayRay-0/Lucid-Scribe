@@ -3,6 +3,7 @@ using Lucid_Scribe.Data.Entities;
 using Lucid_Scribe.Data.Repositories.Abstractions;
 using Lucid_Scribe.Services.Abstractions;
 using Lucid_Scribe.Services.DTOs;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,51 +14,61 @@ namespace Lucid_Scribe.Services
 {
     public class DreamService : IDreamService
     {
-        private readonly IRepository<Dream> _repository;
+        private readonly IDreamRepository _dreamRepository;
+        private readonly IRepository<Emotion> _emotionRepository;
         private readonly IMapper _mapper;
-        public DreamService(IRepository<Dream> repository, IMapper mapper)
+        public DreamService(IDreamRepository dreamRepository, IRepository<Emotion> emotionRepository, IMapper mapper)
         {
-            _repository = repository;
+            _dreamRepository = dreamRepository;
+            _emotionRepository = emotionRepository;
             _mapper = mapper;
         }
 
-        public async Task AddAsync(DreamDTO model)
+        public async Task AddAsync(DreamCreateDTO model)
         {
             var dream = _mapper
                 .Map<Dream>(model);
+            var emotions = model.EmotionsIds
+               .Select(item => _emotionRepository.GetByIdAsync(item).Result)
+               .ToList();
+            dream.Emotions = emotions;
 
-            await _repository.AddAsync(dream);
+            await _dreamRepository.AddAsync(dream);
         }
 
         public async Task DeleteByIdAsync(int id)
         {
-            await _repository.DeleteByIdAsync(id);
+            await _dreamRepository.DeleteByIdAsync(id);
         }
 
         public async Task<List<DreamDTO>> GetAsync()
         {
-            var dreams = (await _repository.GetAllAsync())
+            var dreams = (await _dreamRepository.GetAllAsync())
                 .ToList();
             return _mapper.Map<List<DreamDTO>>(dreams);
         }
 
         public async Task<DreamDTO> GetByIdAsync(int id)
         {
-            var category = await _repository.GetByIdAsync(id);
+            var category = await _dreamRepository.GetByIdAsync(id);
             return _mapper.Map<DreamDTO>(category);
         }
 
         public async Task<List<DreamDTO>> GetByNameAsync(string title)
         {
-            var dreams = (await _repository.GetAsync(item => item.Title == title))
+            var dreams = (await _dreamRepository.GetAsync(item => item.Title == title))
                 .ToList();
             return _mapper.Map<List<DreamDTO>>(dreams);
         }
 
-        public async Task UpdateAsync(DreamDTO model)
+        public async Task UpdateAsync(DreamEditDTO model)
         {
             var dream = _mapper.Map<Dream>(model);
-            await _repository.UpdateAsync(dream);
+            var emotions = model.EmotionsIds
+                .Select(item => _emotionRepository.GetByIdAsync(item).Result)
+                .ToList();
+
+            await _dreamRepository.UpdateDreamAsync(dream, emotions);
         }
     }
 }
