@@ -1,4 +1,5 @@
 using Lucid_Scribe.Data;
+using Lucid_Scribe.Data.Data;
 using Lucid_Scribe.Data.Entities;
 using Lucid_Scribe.Data.Repositories;
 using Lucid_Scribe.Data.Repositories.Abstractions;
@@ -6,6 +7,8 @@ using Lucid_Scribe.Services;
 using Lucid_Scribe.Services.Abstractions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace Lucid_Scribe
 {
@@ -23,6 +26,9 @@ namespace Lucid_Scribe
                 options.UseSqlServer(connectionString);
                 options.UseLazyLoadingProxies();
             });
+
+           
+
             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
             builder.Services.AddIdentity<AppUser, IdentityRole>()
@@ -39,6 +45,13 @@ namespace Lucid_Scribe
                 DreamService>();
             builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             var app = builder.Build();
+
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                DataSeed.Seed(services);
+            }
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
