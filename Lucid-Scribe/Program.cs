@@ -14,7 +14,7 @@ namespace Lucid_Scribe
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
@@ -50,7 +50,7 @@ namespace Lucid_Scribe
             {
                 var services = scope.ServiceProvider;
 
-                DataSeed.Seed(services);
+                await DataSeed.SeedAsync(services);
             }
 
             // Configure the HTTP request pipeline.
@@ -65,7 +65,7 @@ namespace Lucid_Scribe
                 app.UseHsts();
             }
 
-            app.UseHttpsRedirection();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();

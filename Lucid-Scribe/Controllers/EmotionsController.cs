@@ -2,9 +2,11 @@
 using Microsoft.EntityFrameworkCore;
 using Lucid_Scribe.Services.DTOs;
 using Lucid_Scribe.Services.Abstractions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Lucid_Scribe.Controllers
 {
+    [Authorize(Roles ="ADMIN")]
     public class EmotionsController : Controller
     {
         private readonly IEmotionService _emotionService;
