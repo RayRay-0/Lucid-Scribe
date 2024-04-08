@@ -27,7 +27,14 @@ namespace Lucid_Scribe.Controllers
         // GET: Dreams
         public async Task<IActionResult> Index()
         {
-            return View(await _dreamService.GetAsync());
+            if (User.IsInRole("ADMIN"))
+            {
+                return View(await _dreamService.GetAsync());
+            }
+            else
+            {
+                return View(await _dreamService.GetByUserAsync((await _userManager.GetUserAsync(User)).Id));
+            }
         }
 
         // GET: Dreams/Details/5
@@ -42,6 +49,12 @@ namespace Lucid_Scribe.Controllers
             if (dream == null)
             {
                 return NotFound();
+            }
+
+            var currentUserId = (await _userManager.GetUserAsync(User)).Id;
+            if(dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            {
+                return Unauthorized();
             }
 
             return View(dream);
@@ -86,6 +99,13 @@ namespace Lucid_Scribe.Controllers
             {
                 return NotFound();
             }
+
+            var currentUserId = (await _userManager.GetUserAsync(User)).Id;
+            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            {
+                return Unauthorized();
+            }
+
             ViewBag.Emotions = await _emotionService.GetAsync();
             var model = new DreamEditDTO(dream);
             model.EmotionsIds = dream.Emotions.Select(item => item.Id).ToList();
@@ -102,6 +122,17 @@ namespace Lucid_Scribe.Controllers
             if (id != dream.Id)
             {
                 return NotFound();
+            }
+
+            if (dream == null)
+            {
+                return NotFound();
+            }
+
+            var currentUserId = (await _userManager.GetUserAsync(User)).Id;
+            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            {
+                return Unauthorized();
             }
 
             if (ModelState.IsValid)
@@ -140,6 +171,12 @@ namespace Lucid_Scribe.Controllers
                 return NotFound();
             }
 
+            var currentUserId = (await _userManager.GetUserAsync(User)).Id;
+            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            {
+                return Unauthorized();
+            }
+
             return View(dream);
         }
 
@@ -148,6 +185,18 @@ namespace Lucid_Scribe.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
+            var dream = await _dreamService.GetByIdAsync(id);
+            if (dream == null)
+            {
+                return NotFound();
+            }
+
+            var currentUserId = (await _userManager.GetUserAsync(User)).Id;
+            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            {
+                return Unauthorized();
+            }
+
             await _dreamService.DeleteByIdAsync(id);
             return RedirectToAction(nameof(Index));
         }

@@ -61,6 +61,13 @@ namespace Lucid_Scribe.Services
             return _mapper.Map<List<DreamDTO>>(dreams);
         }
 
+        public async Task<List<DreamDTO>> GetByUserAsync(string id)
+        {
+            var dreams = (await _dreamRepository.GetAsync(item => item.UserId == id))
+                .ToList();
+            return _mapper.Map<List<DreamDTO>>(dreams);
+        }
+
         public async Task UpdateAsync(DreamEditDTO model)
         {
             var dream = _mapper.Map<Dream>(model);
