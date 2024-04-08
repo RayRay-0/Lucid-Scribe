@@ -15,6 +15,7 @@ namespace Lucid_Scribe.Services.DTOs
             Description = dream.Description;
             EntryDate = dream.EntryDate;
             UserId = dream.UserId;
+            Weirdness = dream.Weirdness;
         }
 
         public DreamEditDTO()
