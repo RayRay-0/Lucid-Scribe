@@ -13,6 +13,9 @@ namespace Lucid_Scribe.Services.DTOs
         public DateTime EntryDate { get; set; }
         public string UserId { get; set; }
         public List<EmotionDTO>? Emotions { get; set; }
-        public double Weirdness { get; set; }
+        public string People { get; set; }
+        public string Places { get; set; }
+        public string Objects { get; set; }
+        public int Weirdness { get; set; }
     }
 }

@@ -21,9 +21,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.EntryDate)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Emotions)
-            </th>
             <th></th>
         </tr>
     </thead>
@@ -39,12 +36,6 @@
                 </td>
                 <td>
                     @Html.DisplayFor(modelItem => item.EntryDate)
-                </td>
-                <td>
-                    @foreach (var emotion in item.Emotions)
-                    {
-                        <img src="@emotion.IconURL" alt="@emotion.Name" title="@emotion.Name">
-                    }
                 </td>
                 <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

@@ -31,10 +31,25 @@
                 <label asp-for="EmotionsIds" class="control-label"></label>
                 <select multiple="multiple" asp-for="EmotionsIds" class="form-control" asp-items="@(new MultiSelectList(ViewBag.Emotions, "Id", "Name"))"></select>
             </div>
-             <div class="form-group">
+            <div class="form-group">
                 <label asp-for="Weirdness" class="control-label"></label>
-                <input type="range" min="0.0" max="1.0" step="0.05" asp-for="Weirdness" class="form-control" />
+                <input type="range" min="0" max="100" step="1" asp-for="Weirdness" class="form-control" />
                 <span asp-validation-for="Weirdness" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="People" class="control-label"></label>
+                <input asp-for="People" class="form-control" />
+                <span asp-validation-for="People" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Places" class="control-label"></label>
+                <input asp-for="Places" class="form-control" />
+                <span asp-validation-for="Places" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Objects" class="control-label"></label>
+                <input asp-for="Objects" class="form-control" />
+                <span asp-validation-for="Objects" class="text-danger"></span>
             </div>
             <input type="hidden" asp-for="UserId" />
             <div class="form-group">

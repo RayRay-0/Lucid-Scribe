@@ -15,6 +15,9 @@ namespace Lucid_Scribe.Services.DTOs
             Description = dream.Description;
             EntryDate = dream.EntryDate;
             UserId = dream.UserId;
+            People = dream.People;
+            Places = dream.Places;
+            Objects = dream.Objects;
             Weirdness = dream.Weirdness;
         }
 
