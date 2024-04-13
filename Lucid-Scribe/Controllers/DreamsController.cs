@@ -27,7 +27,7 @@ namespace Lucid_Scribe.Controllers
         // GET: Dreams
         public async Task<IActionResult> Index()
         {
-            if (User.IsInRole("ADMIN"))
+            if (User.IsInRole("Admin"))
             {
                 return View(await _dreamService.GetAsync());
             }
@@ -52,7 +52,7 @@ namespace Lucid_Scribe.Controllers
             }
 
             var currentUserId = (await _userManager.GetUserAsync(User)).Id;
-            if(dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            if(dream.UserId != currentUserId && !User.IsInRole("Admin"))
             {
                 return Unauthorized();
             }
@@ -101,7 +101,7 @@ namespace Lucid_Scribe.Controllers
             }
 
             var currentUserId = (await _userManager.GetUserAsync(User)).Id;
-            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            if (dream.UserId != currentUserId && !User.IsInRole("Admin"))
             {
                 return Unauthorized();
             }
@@ -130,7 +130,7 @@ namespace Lucid_Scribe.Controllers
             }
 
             var currentUserId = (await _userManager.GetUserAsync(User)).Id;
-            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            if (dream.UserId != currentUserId && !User.IsInRole("Admin"))
             {
                 return Unauthorized();
             }
@@ -154,6 +154,8 @@ namespace Lucid_Scribe.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            ViewBag.Emotions = await _emotionService.GetAsync();
+
             return View(dream);
         }
 
@@ -172,7 +174,7 @@ namespace Lucid_Scribe.Controllers
             }
 
             var currentUserId = (await _userManager.GetUserAsync(User)).Id;
-            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            if (dream.UserId != currentUserId && !User.IsInRole("Admin"))
             {
                 return Unauthorized();
             }
@@ -192,7 +194,7 @@ namespace Lucid_Scribe.Controllers
             }
 
             var currentUserId = (await _userManager.GetUserAsync(User)).Id;
-            if (dream.UserId != currentUserId && !User.IsInRole("ADMIN"))
+            if (dream.UserId != currentUserId && !User.IsInRole("Admin"))
             {
                 return Unauthorized();
             }

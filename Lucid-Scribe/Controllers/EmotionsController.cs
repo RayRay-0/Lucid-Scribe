@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace Lucid_Scribe.Controllers
 {
-    [Authorize(Roles ="ADMIN")]
+    [Authorize(Roles ="Admin")]
     public class EmotionsController : Controller
     {
         private readonly IEmotionService _emotionService;

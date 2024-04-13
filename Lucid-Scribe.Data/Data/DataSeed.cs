@@ -27,10 +27,12 @@ namespace Lucid_Scribe.Data.Data
             }
 
             context.Emotions.AddRange(
-                new Emotion() { Name = "Sad", IconURL = "sad.png" },
-                new Emotion() { Name = "Happy", IconURL = "happy.png" },
-                new Emotion() { Name = "Angry", IconURL = "angry.png" },
-                new Emotion() { Name = "Nostalgic", IconURL = "nostalgic.png" }
+                new Emotion() { Name = "Joy", IconURL = "joy.png" },
+                new Emotion() { Name = "Fear", IconURL = "fear.png" },
+                new Emotion() { Name = "Sadness", IconURL = "sadness.png" },
+                new Emotion() { Name = "Disgust", IconURL = "disgust.png" },
+                new Emotion() { Name = "Anger", IconURL = "anger.png" },
+                new Emotion() { Name = "Love", IconURL = "love.png" }
             );
 
             context.Roles.AddRange(new IdentityRole() { Name = "Admin" }, new IdentityRole() { Name = "User" });
@@ -50,7 +52,7 @@ namespace Lucid_Scribe.Data.Data
         {
             if (!roleManager.Roles.Any())
             {
-                string[] roles = new string[] { "ADMIN", "USER" };
+                string[] roles = new string[] { "Admin", "User" };
                 foreach (var role in roles)
                 {
                     await roleManager.CreateAsync(new IdentityRole() { Name = role });
@@ -72,7 +74,7 @@ namespace Lucid_Scribe.Data.Data
 
                 await userManager.CreateAsync(admin, "Pass123@");
 
-                await userManager.AddToRoleAsync(admin, "ADMIN");
+                await userManager.AddToRoleAsync(admin, "Admin");
             }
         }
 
@@ -90,7 +92,7 @@ namespace Lucid_Scribe.Data.Data
 
                 await userManager.CreateAsync(account, "Pass123@");
 
-                await userManager.AddToRoleAsync(account, "USER");
+                await userManager.AddToRoleAsync(account, "User");
             }
         }
 
