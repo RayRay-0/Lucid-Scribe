@@ -35,7 +35,7 @@ namespace Lucid_Scribe.Data.Data
                 new Emotion() { Name = "Love", IconURL = "love.png" }
             );
 
-            context.Roles.AddRange(new IdentityRole() { Name = "Admin" }, new IdentityRole() { Name = "User" });
+           
             await context.SaveChangesAsync();
         }
 
@@ -55,7 +55,7 @@ namespace Lucid_Scribe.Data.Data
                 string[] roles = new string[] { "Admin", "User" };
                 foreach (var role in roles)
                 {
-                    await roleManager.CreateAsync(new IdentityRole() { Name = role });
+                    await roleManager.CreateAsync(new IdentityRole() { Name = role, NormalizedName = role.ToUpper() });
                 }
             }
         }
